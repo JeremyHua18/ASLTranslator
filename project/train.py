@@ -1,11 +1,18 @@
+import warnings
+warnings.filterwarnings("ignore")
+
+import pickle
+
 import os
 import tensorflow as tf
-from tf.keras.optimizers import RMSprop
-from tf.keras.preprocessing.image import ImageDataGenerator
-from tf.keras import layers
-from tf.keras import Model
-from tf.keras.applications.inception_v3 import InceptionV3
-from tf.keras.optimizers import RMSprop
+from tensorflow.keras.optimizers import RMSprop
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras import layers
+from tensorflow.keras import Model
+from tensorflow.keras.applications.inception_v3 import InceptionV3
+from tensorflow.keras.optimizers import RMSprop
+
+
 
 class myCallback(tf.keras.callbacks.Callback):
   def on_epoch_end(self, epoch, logs={}):
@@ -15,10 +22,10 @@ class myCallback(tf.keras.callbacks.Callback):
 
 # Transfer Learning using InceptionV3 Model
 
-base_train_dir = '../dataset/train'
+base_train_dir = './splitDataset/training/'
 train_a_dir = os.path.join(base_train_dir, 'a')
 
-base_test_dir = '../dataset/test'
+base_test_dir = './splitDataset/testing/'
 test_a_dir = os.path.join(base_test_dir, 'a')
 
 pre_trained_model = InceptionV3(input_shape = (200,200,3),  #Shape of images
@@ -66,10 +73,14 @@ history = model.fit_generator(
             train_generator,
             validation_data = test_generator,
             steps_per_epoch = 100,
-            epochs = 100,
+            epochs = 75,
             validation_steps = 50,
             verbose = 2,
             callbacks=[callbacks])
+
+
+model.save("my_model_test")
+history.save("my_history_test")
 
 
 
